@@ -1,4 +1,11 @@
-<div id="<%= dom_id(comment)%>">
-  <%= comment.content %>
-  <%= time_tag comment.updated_at, "data-local": "time-ago" %>
+<div id="<%= dom_id(comment)%>" class="border-l-4 border-gray-300 pl-4 py-2">
+  <p class="text-sm text-gray-600 mb-1">
+    <strong><%= comment.user&.email || "Anonymous" %></strong>
+  </p>
+  <p class="text-gray-800">
+    <%= comment.content %>
+  </p>
+  <p class="text-xs text-gray-500 mt-1">
+    <%= time_tag comment.updated_at, "data-local": "time-ago" %>
+  </p>
 </div>
