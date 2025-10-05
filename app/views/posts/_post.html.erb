@@ -9,6 +9,11 @@
     <%= post.body %>
   </p>
 
+  <p class="text-sm text-gray-600">
+    <strong>Author:</strong>
+    <%= post.user&.email || "Unknown" %>
+  </p>
+
   <p>
     <strong>Updated at: </strong>
     <%= time_tag post.updated_at, "data-local": "time", "data-format": "%B, %e, %Y %l:%M%P" %>

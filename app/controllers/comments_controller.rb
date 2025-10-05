@@ -2,7 +2,9 @@ class CommentsController < ApplicationController
   before_action :set_post
 
   def create
-    @post.comments.create! params.expect(comment: [:content])
+    @comment = @post.comments.build(params.expect(comment: [:content]))
+    @comment.user = current_user
+    @comment.save!
     redirect_to @post
   end
 
