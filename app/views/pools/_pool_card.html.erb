@@ -1,0 +1,114 @@
+<div class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200" data-pool-id="<%= pool.id %>">
+  <div class="relative h-48 bg-gradient-to-br from-blue-50 to-gray-100 overflow-hidden">
+    <% if pool.photos.attached? && pool.photos.first %>
+      <%= image_tag pool.photos.first, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-200", alt: pool.name %>
+    <% else %>
+      <div class="flex items-center justify-center h-full">
+        <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+    <% end %>
+    
+    <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+      <% if pool.verified %>
+        <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full shadow-sm">✓ Verified</span>
+      <% end %>
+      <% if pool.indoor %>
+        <span class="px-2.5 py-1 bg-gray-800 text-white text-xs font-semibold rounded-full shadow-sm">Indoor</span>
+      <% end %>
+      <% if pool.outdoor %>
+        <span class="px-2.5 py-1 bg-green-600 text-white text-xs font-semibold rounded-full shadow-sm">Outdoor</span>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="p-5">
+    <div class="flex justify-between items-start mb-2">
+      <h3 class="text-lg font-bold text-gray-900 flex-1">
+        <%= link_to pool.name, pool_path(pool), class: "hover:text-blue-600 transition-colors" %>
+      </h3>
+      <% if pool.respond_to?(:distance) && pool.distance %>
+        <span class="text-sm font-medium text-gray-600 ml-2"><%= pool.distance %> mi</span>
+      <% end %>
+    </div>
+    
+    <div class="flex items-center text-sm text-gray-600 mb-4">
+      <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+      <%= pool.city %>, <%= pool.state %>
+    </div>
+    
+    <div class="flex items-center gap-4 text-sm mb-4 pb-4 border-b border-gray-100">
+      <div class="flex items-center text-gray-700">
+        <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+        </svg>
+        <span class="font-medium"><%= pool.length_value %></span>
+        <span class="text-gray-500 ml-1"><%= pool.length_unit %></span>
+      </div>
+      <div class="flex items-center text-gray-700">
+        <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <span class="font-medium"><%= pool.total_lanes %></span>
+        <span class="text-gray-500 ml-1"><%= pluralize(pool.total_lanes, 'lane') %></span>
+      </div>
+    </div>
+    
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <div class="text-2xl font-bold text-gray-900">
+          $<%= number_with_precision(pool.price_per_hour, precision: 0) %>
+          <span class="text-sm font-normal text-gray-500">/hr</span>
+        </div>
+      </div>
+      <div class="text-right">
+        <% next_slot = pool.next_available_slot %>
+        <% if next_slot %>
+          <div class="text-xs text-gray-500 mb-0.5">Next available</div>
+          <div class="text-sm font-semibold text-gray-900"><%= next_slot.slot_date.strftime('%b %d') %> <%= next_slot.start_time.strftime('%I:%M%p') %></div>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-2 mb-4">
+      <% if pool.open_stall_showers || pool.private_showers %>
+        <span class="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
+          <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          Showers
+        </span>
+      <% end %>
+      <% if pool.day_lockers %>
+        <span class="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
+          <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          Lockers
+        </span>
+      <% end %>
+      <% if pool.lifeguard_on_duty %>
+        <span class="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
+          <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          Lifeguard
+        </span>
+      <% end %>
+      <% if pool.has_coaches %>
+        <span class="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
+          <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          Coaches
+        </span>
+      <% end %>
+    </div>
+    
+    <%= link_to "Select time", pool_path(pool), class: "block w-full text-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-all shadow-sm hover:shadow" %>
+  </div>
+</div>

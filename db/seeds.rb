@@ -76,3 +76,221 @@ puts "\nSample login credentials:"
 puts "  Email: alice@example.com"
 puts "  Password: password123"
 puts "\nOther users: bob@example.com, charlie@example.com (same password)"
+
+AvailabilitySlot.destroy_all
+Pool.destroy_all
+
+puts "\nCreating pools..."
+
+pools_data = [
+  {
+    name: "Downtown Aquatic Center",
+    address: "123 Main St",
+    city: "San Francisco",
+    state: "CA",
+    zip_code: "94102",
+    latitude: 37.7749,
+    longitude: -122.4194,
+    length_value: 25,
+    length_unit: "yards",
+    total_lanes: 6,
+    verified: true,
+    indoor: true,
+    outdoor: false,
+    has_photos: true,
+    open_stall_showers: true,
+    private_showers: true,
+    day_lockers: true,
+    byol_lockers: false,
+    membership_type: "public",
+    day_pass_available: true,
+    price_per_hour: 15.00,
+    lifeguard_on_duty: true,
+    pull_buoy_available: true,
+    kickboard_available: true,
+    fins_available: false,
+    has_coaches: true,
+    accessible: true,
+    masters_swimming: true,
+    parking_available: true,
+    paid_parking: false,
+    description: "Modern aquatic facility in the heart of downtown with Olympic-size lanes."
+  },
+  {
+    name: "Sunset Pool & Spa",
+    address: "456 Beach Ave",
+    city: "San Francisco",
+    state: "CA",
+    zip_code: "94116",
+    latitude: 37.7577,
+    longitude: -122.4870,
+    length_value: 50,
+    length_unit: "meters",
+    total_lanes: 8,
+    verified: true,
+    indoor: false,
+    outdoor: true,
+    has_photos: true,
+    open_stall_showers: false,
+    private_showers: true,
+    day_lockers: true,
+    byol_lockers: true,
+    membership_type: "private",
+    day_pass_available: true,
+    price_per_hour: 25.00,
+    lifeguard_on_duty: true,
+    pull_buoy_available: true,
+    kickboard_available: true,
+    fins_available: true,
+    has_coaches: true,
+    accessible: false,
+    masters_swimming: true,
+    parking_available: true,
+    paid_parking: true,
+    description: "Premier outdoor facility near the beach with heated lanes."
+  },
+  {
+    name: "Community Recreation Pool",
+    address: "789 Park Blvd",
+    city: "Oakland",
+    state: "CA",
+    zip_code: "94610",
+    latitude: 37.8044,
+    longitude: -122.2712,
+    length_value: 25,
+    length_unit: "meters",
+    total_lanes: 4,
+    verified: false,
+    indoor: true,
+    outdoor: false,
+    has_photos: false,
+    open_stall_showers: true,
+    private_showers: false,
+    day_lockers: true,
+    byol_lockers: true,
+    membership_type: "public",
+    day_pass_available: true,
+    price_per_hour: 10.00,
+    lifeguard_on_duty: false,
+    pull_buoy_available: false,
+    kickboard_available: true,
+    fins_available: false,
+    has_coaches: false,
+    accessible: true,
+    masters_swimming: false,
+    parking_available: true,
+    paid_parking: false,
+    description: "Affordable community pool with friendly staff."
+  },
+  {
+    name: "Elite Swim Academy",
+    address: "321 Victory Ln",
+    city: "San Jose",
+    state: "CA",
+    zip_code: "95113",
+    latitude: 37.3382,
+    longitude: -121.8863,
+    length_value: 25,
+    length_unit: "yards",
+    total_lanes: 10,
+    verified: true,
+    indoor: true,
+    outdoor: true,
+    has_photos: true,
+    open_stall_showers: true,
+    private_showers: true,
+    day_lockers: true,
+    byol_lockers: false,
+    membership_type: "private",
+    day_pass_available: false,
+    price_per_hour: 30.00,
+    lifeguard_on_duty: true,
+    pull_buoy_available: true,
+    kickboard_available: true,
+    fins_available: true,
+    has_coaches: true,
+    accessible: true,
+    masters_swimming: true,
+    parking_available: true,
+    paid_parking: false,
+    description: "Professional training facility for serious swimmers."
+  },
+  {
+    name: "Marina Fitness Pool",
+    address: "555 Harbor Dr",
+    city: "San Francisco",
+    state: "CA",
+    zip_code: "94123",
+    latitude: 37.8024,
+    longitude: -122.4381,
+    length_value: 25,
+    length_unit: "yards",
+    total_lanes: 5,
+    verified: true,
+    indoor: true,
+    outdoor: false,
+    has_photos: true,
+    open_stall_showers: true,
+    private_showers: true,
+    day_lockers: true,
+    byol_lockers: true,
+    membership_type: "public",
+    day_pass_available: true,
+    price_per_hour: 18.00,
+    lifeguard_on_duty: true,
+    pull_buoy_available: true,
+    kickboard_available: true,
+    fins_available: false,
+    has_coaches: false,
+    accessible: true,
+    masters_swimming: false,
+    parking_available: false,
+    paid_parking: false,
+    description: "Part of a full-service fitness center near the Marina."
+  }
+]
+
+pools_data.each do |pool_data|
+  pool = Pool.create!(pool_data)
+  puts "Created pool: #{pool.name}"
+  
+  (0..13).each do |days_ahead|
+    date = Date.current + days_ahead.days
+    
+    [6, 7, 8, 9, 10, 11].each do |hour|
+      pool.availability_slots.create!(
+        slot_date: date,
+        start_time: Time.parse("#{hour}:00"),
+        end_time: Time.parse("#{hour}:30"),
+        available_lanes: rand(1..pool.total_lanes)
+      )
+      pool.availability_slots.create!(
+        slot_date: date,
+        start_time: Time.parse("#{hour}:30"),
+        end_time: Time.parse("#{hour + 1}:00"),
+        available_lanes: rand(1..pool.total_lanes)
+      )
+    end
+    
+    [12, 13, 14, 15, 16, 17, 18, 19, 20, 21].each do |hour|
+      pool.availability_slots.create!(
+        slot_date: date,
+        start_time: Time.parse("#{hour}:00"),
+        end_time: Time.parse("#{hour}:30"),
+        available_lanes: rand(1..pool.total_lanes)
+      )
+      pool.availability_slots.create!(
+        slot_date: date,
+        start_time: Time.parse("#{hour}:30"),
+        end_time: Time.parse("#{hour + 1}:00"),
+        available_lanes: rand(1..pool.total_lanes)
+      )
+    end
+  end
+  
+  puts "  Created availability slots for #{pool.name}"
+end
+
+puts "\nPool seeding complete!"
+puts "Created #{Pool.count} pools"
+puts "Created #{AvailabilitySlot.count} availability slots"
