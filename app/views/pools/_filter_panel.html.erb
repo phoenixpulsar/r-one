@@ -10,17 +10,17 @@
     
     <div class="mb-6">
       <h3 class="text-sm font-medium text-gray-900 mb-3">Showers</h3>
-      <div class="space-y-2">
-        <label class="flex items-center">
-          <%= form.check_box "filters[open_stall_showers]", { checked: @filter_params[:open_stall_showers] == '1', class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }, '1', nil %>
-          <span class="ml-2 text-sm text-gray-700">Open stalls</span>
-        </label>
-        <label class="flex items-center">
-          <%= form.check_box "filters[private_showers]", { checked: @filter_params[:private_showers] == '1', class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }, '1', nil %>
-          <span class="ml-2 text-sm text-gray-700">Private</span>
-        </label>
+        <div class="space-y-2">
+          <label class="flex items-start cursor-pointer group">
+            <%= form.check_box "filters[open_stall_showers]", { checked: @filter_params[:open_stall_showers] == '1', class: "mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 transition-all" }, '1', nil %>
+            <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900 transition-colors">Open stalls</span>
+          </label>
+          <label class="flex items-start cursor-pointer group">
+            <%= form.check_box "filters[private_showers]", { checked: @filter_params[:private_showers] == '1', class: "mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 transition-all" }, '1', nil %>
+            <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900 transition-colors">Private</span>
+          </label>
+        </div>
       </div>
-    </div>
     
     <div class="mb-6">
       <h3 class="text-sm font-medium text-gray-900 mb-3">Pool Length</h3>

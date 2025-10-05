@@ -16,7 +16,7 @@ class PoolsController < ApplicationController
       @pools.sort_by!(&:distance) if params[:sort] == 'distance'
     end
     
-    @filter_params = params[:filters] || {}
+    @filter_params = (params[:filters] || {}).to_h.with_indifferent_access
   end
   
   def show
