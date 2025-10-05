@@ -1,0 +1,190 @@
+<aside class="bg-white rounded-lg shadow-sm border p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-semibold text-gray-900">Filters</h2>
+    <%= link_to "Clear all", pools_path, class: "text-sm text-blue-600 hover:text-blue-700" %>
+  </div>
+  
+  <%= form_with url: pools_path, method: :get, data: { controller: "filter-form", action: "change->filter-form#debouncedSubmit" } do |form| %>
+    <%= form.hidden_field :location, value: params[:location] %>
+    <%= form.hidden_field :sort, value: params[:sort] %>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Showers</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[open_stall_showers]", { checked: @filter_params[:open_stall_showers] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Open stalls</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[private_showers]", { checked: @filter_params[:private_showers] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Private</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Pool Length</h3>
+      <div class="flex gap-2">
+        <label class="flex-1">
+          <%= form.radio_button "filters[length_unit]", "yards", checked: @filter_params[:length_unit] == 'yards', class: "sr-only peer" %>
+          <div class="px-4 py-2 border border-gray-300 rounded-md text-center cursor-pointer peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 hover:border-blue-400">
+            Yards
+          </div>
+        </label>
+        <label class="flex-1">
+          <%= form.radio_button "filters[length_unit]", "meters", checked: @filter_params[:length_unit] == 'meters', class: "sr-only peer" %>
+          <div class="px-4 py-2 border border-gray-300 rounded-md text-center cursor-pointer peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 hover:border-blue-400">
+            Meters
+          </div>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Minimum Lanes</h3>
+      <%= form.number_field "filters[min_lanes]", 
+          value: @filter_params[:min_lanes],
+          min: 1,
+          max: 50,
+          placeholder: "Any",
+          class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Lockers</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[day_lockers]", { checked: @filter_params[:day_lockers] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Day locker available</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[byol_lockers]", { checked: @filter_params[:byol_lockers] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Bring your own lock</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Access Type</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[membership_types][]", { checked: @filter_params.dig(:membership_types)&.include?('public') }, 'public', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Public</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[membership_types][]", { checked: @filter_params.dig(:membership_types)&.include?('private') }, 'private', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Private (members only)</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[membership_types][]", { checked: @filter_params.dig(:membership_types)&.include?('day_pass') }, 'day_pass', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Day pass available</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Price per Hour</h3>
+      <div class="flex gap-2">
+        <%= form.number_field "filters[price_min]", 
+            value: @filter_params[:price_min],
+            min: 0,
+            step: 1,
+            placeholder: "Min $",
+            class: "flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+        <%= form.number_field "filters[price_max]", 
+            value: @filter_params[:price_max],
+            min: 0,
+            step: 1,
+            placeholder: "Max $",
+            class: "flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <label class="flex items-center">
+        <%= form.check_box "filters[lifeguard_on_duty]", { checked: @filter_params[:lifeguard_on_duty] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+        <span class="ml-2 text-sm font-medium text-gray-900">Lifeguard on duty</span>
+      </label>
+    </div>
+    
+    <div class="mb-6">
+      <label class="flex items-center">
+        <%= form.check_box "filters[has_photos]", { checked: @filter_params[:has_photos] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+        <span class="ml-2 text-sm font-medium text-gray-900">Has photos</span>
+      </label>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Pool Type</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[indoor]", { checked: @filter_params[:indoor] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Indoor</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[outdoor]", { checked: @filter_params[:outdoor] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Outdoor</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Equipment Available</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[pull_buoy_available]", { checked: @filter_params[:pull_buoy_available] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Pull buoy</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[kickboard_available]", { checked: @filter_params[:kickboard_available] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Kickboard</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[fins_available]", { checked: @filter_params[:fins_available] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Fins</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Additional Amenities</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[has_coaches]", { checked: @filter_params[:has_coaches] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Coaches available</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[accessible]", { checked: @filter_params[:accessible] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Accessibility features</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[masters_swimming]", { checked: @filter_params[:masters_swimming] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Masters swimming</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">Parking</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <%= form.check_box "filters[parking_available]", { checked: @filter_params[:parking_available] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Parking available</span>
+        </label>
+        <label class="flex items-center">
+          <%= form.check_box "filters[paid_parking]", { checked: @filter_params[:paid_parking] == '1' }, '1', nil, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+          <span class="ml-2 text-sm text-gray-700">Paid parking</span>
+        </label>
+      </div>
+    </div>
+    
+    <% if local_assigns[:mobile] %>
+      <div class="mt-6 flex gap-2">
+        <%= form.submit "Apply Filters", class: "flex-1 px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+        <button type="button" data-action="click->pool-filters#closeMobile" class="px-4 py-3 border border-gray-300 rounded-md hover:bg-gray-50">
+          Cancel
+        </button>
+      </div>
+    <% end %>
+  <% end %>
+</aside>

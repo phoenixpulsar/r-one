@@ -1,0 +1,105 @@
+<div class="w-full max-w-4xl mx-auto">
+  <%= link_to "← Back to search", pools_path, class: "text-blue-600 hover:text-blue-700 mb-4 inline-block" %>
+  
+  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <% if @pool.photos.attached? && @pool.photos.any? %>
+      <div class="h-96 bg-gray-200">
+        <%= image_tag @pool.photos.first, class: "w-full h-full object-cover", alt: @pool.name %>
+      </div>
+    <% end %>
+    
+    <div class="p-6">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @pool.name %></h1>
+          <p class="text-gray-600"><%= @pool.address %>, <%= @pool.city %>, <%= @pool.state %> <%= @pool.zip_code %></p>
+        </div>
+        <% if @pool.verified %>
+          <span class="px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded">Verified</span>
+        <% end %>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div>
+          <p class="text-sm text-gray-600">Length</p>
+          <p class="text-lg font-semibold"><%= @pool.length_value %> <%= @pool.length_unit %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Lanes</p>
+          <p class="text-lg font-semibold"><%= @pool.total_lanes %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Price</p>
+          <p class="text-lg font-semibold">$<%= number_with_precision(@pool.price_per_hour, precision: 2) %>/hr</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Type</p>
+          <p class="text-lg font-semibold">
+            <%= @pool.indoor ? 'Indoor' : '' %>
+            <%= @pool.outdoor ? 'Outdoor' : '' %>
+          </p>
+        </div>
+      </div>
+      
+      <% if @pool.description.present? %>
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold mb-2">About</h2>
+          <p class="text-gray-700"><%= @pool.description %></p>
+        </div>
+      <% end %>
+      
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-3">Amenities</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <% if @pool.open_stall_showers %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Open stall showers</div>
+          <% end %>
+          <% if @pool.private_showers %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Private showers</div>
+          <% end %>
+          <% if @pool.day_lockers %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Day lockers</div>
+          <% end %>
+          <% if @pool.byol_lockers %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> BYOL lockers</div>
+          <% end %>
+          <% if @pool.lifeguard_on_duty %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Lifeguard on duty</div>
+          <% end %>
+          <% if @pool.pull_buoy_available %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Pull buoy</div>
+          <% end %>
+          <% if @pool.kickboard_available %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Kickboard</div>
+          <% end %>
+          <% if @pool.fins_available %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Fins</div>
+          <% end %>
+          <% if @pool.has_coaches %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Coaches available</div>
+          <% end %>
+          <% if @pool.accessible %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Accessibility features</div>
+          <% end %>
+          <% if @pool.masters_swimming %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Masters swimming</div>
+          <% end %>
+          <% if @pool.parking_available %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Parking available</div>
+          <% end %>
+          <% if @pool.paid_parking %>
+            <div class="flex items-center text-sm"><span class="text-green-600 mr-2">✓</span> Paid parking</div>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-3">Availability</h2>
+        <div class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+          <p class="text-center text-gray-600">Availability calendar coming soon</p>
+          <p class="text-center text-sm text-gray-500 mt-2">Hourly/half-hourly lane availability will be displayed here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
