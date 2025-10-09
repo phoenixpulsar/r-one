@@ -1,0 +1,111 @@
+<% content_for :title, "Checkout · R-One Supply" %>
+
+<div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+  <div class="space-y-6">
+    <section class="rounded-4xl border border-slate-800/70 bg-slate-950/70 p-8">
+      <h1 class="text-2xl font-semibold text-white">Contact</h1>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-slate-400">Full name</label>
+          <input type="text" placeholder="Jordan Blake" class="mt-2 w-full rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-slate-400">Email</label>
+          <input type="email" placeholder="you@studio.com" class="mt-2 w-full rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+        </div>
+      </div>
+      <div class="mt-6">
+        <label class="block text-xs font-semibold uppercase tracking-wide text-slate-400">Shipping address</label>
+        <div class="mt-2 grid gap-4 md:grid-cols-2">
+          <input type="text" placeholder="Street" class="rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none md:col-span-2">
+          <input type="text" placeholder="City" class="rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+          <input type="text" placeholder="State" class="rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+          <input type="text" placeholder="Postal code" class="rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-4xl border border-slate-800/70 bg-slate-950/70 p-8">
+      <h2 class="text-2xl font-semibold text-white">Shipping method</h2>
+      <div class="mt-6 space-y-4">
+        <% @shipping_methods.each do |method| %>
+          <label class="flex cursor-pointer items-center justify-between rounded-3xl border border-slate-800/60 bg-slate-900/60 p-5 text-sm text-slate-200 transition hover:border-cyan-400">
+            <div>
+              <p class="font-semibold text-white"><%= method[:label] %></p>
+              <p class="text-xs text-slate-400"><%= method[:eta] %></p>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold text-white"><%= number_to_currency(method[:price_cents] / 100.0) %></p>
+              <% if method == @selected_shipping %>
+                <p class="text-xs text-cyan-300">Recommended</p>
+              <% end %>
+            </div>
+          </label>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="rounded-4xl border border-slate-800/70 bg-slate-950/70 p-8">
+      <h2 class="text-2xl font-semibold text-white">Payment</h2>
+      <p class="mt-2 text-sm text-slate-300">Stripe handles card details securely. Use this UI to preview the flow before plugging in Payment Element.</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold uppercase tracking-wide text-slate-400">Card number</label>
+          <div class="mt-2 flex items-center gap-3 rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100">
+            <span class="text-slate-500">4242 4242 4242 4242</span>
+            <span class="ml-auto rounded-full border border-slate-700 px-2 py-1 text-xs text-slate-400">Test mode</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-slate-400">Expiry</label>
+          <input type="text" placeholder="12 / 29" class="mt-2 w-full rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-slate-400">CVC</label>
+          <input type="text" placeholder="123" class="mt-2 w-full rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none">
+        </div>
+      </div>
+      <div class="mt-8">
+        <%= button_to "Complete order", integrations_stripe_checkout_path, params: { cart: { items: @items.map { |item| { id: item[:product].id, quantity: item[:quantity], price_cents: item[:product].price_cents, name: item[:product].name } }, shipping_rate: @selected_shipping[:id] } }, class: "inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-slate-200" %>
+      </div>
+    </section>
+  </div>
+
+  <aside class="rounded-4xl border border-slate-800/70 bg-slate-950/70 p-8">
+    <h2 class="text-lg font-semibold text-white">Order summary</h2>
+    <div class="mt-6 space-y-4">
+      <% @items.each do |item| %>
+        <div class="flex gap-4">
+          <%= image_tag item[:product].primary_image, alt: item[:product].name, class: "h-20 w-20 rounded-2xl border border-slate-800/60 object-cover" %>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-white"><%= item[:product].name %></p>
+            <p class="text-xs text-slate-400">Qty <%= item[:quantity] %> · <%= item[:color] %></p>
+            <p class="mt-2 text-sm font-medium text-slate-200"><%= number_to_currency(item[:product].price_cents / 100.0) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <dl class="mt-8 space-y-3 text-sm text-slate-300">
+      <div class="flex items-center justify-between">
+        <dt>Subtotal</dt>
+        <dd><%= number_to_currency(@subtotal_cents / 100.0) %></dd>
+      </div>
+      <div class="flex items-center justify-between">
+        <dt>Shipping</dt>
+        <dd><%= number_to_currency(@selected_shipping[:price_cents] / 100.0) %></dd>
+      </div>
+      <div class="flex items-center justify-between">
+        <dt>Tax</dt>
+        <dd><%= number_to_currency(@tax_cents / 100.0) %></dd>
+      </div>
+      <div class="flex items-center justify-between border-t border-slate-800/60 pt-4 text-base font-semibold text-white">
+        <dt>Total due</dt>
+        <dd><%= number_to_currency(@total_cents / 100.0) %></dd>
+      </div>
+    </dl>
+    <div class="mt-8 rounded-3xl border border-slate-800/60 bg-slate-900/60 p-5 text-xs text-slate-400">
+      <p class="font-semibold text-slate-200">Powered by Stripe & Printful</p>
+      <p class="mt-2">Stripe Checkout handles payment authentication. Printful webhooks confirm production milestones.</p>
+    </div>
+  </aside>
+</div>

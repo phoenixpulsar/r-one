@@ -1,0 +1,188 @@
+<section class="relative overflow-hidden rounded-4xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 px-6 py-24 shadow-2xl lg:px-16">
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.35),_transparent_55%)]"></div>
+  <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">On-demand commerce</p>
+      <h1 class="mt-6 text-4xl font-semibold leading-tight text-white sm:text-5xl">Launch a premium storefront with automated fulfillment and Stripe-native checkout.</h1>
+      <p class="mt-6 text-lg text-slate-200">Curate capsules, drop them on your terms, and let Printful handle production while Stripe powers seamless payments. No inventory risk. No friction.</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <%= link_to "Browse the collection", products_path, class: "rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:bg-slate-200" %>
+        <%= link_to "Explore integrations", "#integrations", class: "rounded-full border border-slate-700 px-6 py-3 text-sm font-semibold text-white transition hover:border-slate-500" %>
+      </div>
+      <dl class="mt-10 grid grid-cols-2 gap-6 text-sm text-slate-300 sm:grid-cols-3">
+        <div>
+          <dt class="font-semibold text-white">24hr</dt>
+          <dd class="mt-1">Printful average fulfillment time across catalog</dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-white">1.4%</dt>
+          <dd class="mt-1">Stripe processing ready for global cards & wallets</dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-white">100%</dt>
+          <dd class="mt-1">Automated sync between storefront and Printful SKUs</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="relative isolate">
+      <div class="absolute -inset-3 -z-10 rounded-3xl bg-gradient-to-b from-cyan-500/60 to-indigo-500/20 blur-3xl"></div>
+      <div class="overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-950/80 shadow-2xl">
+        <div class="border-b border-slate-800/70 bg-slate-900/80 px-6 py-4">
+          <p class="text-sm font-medium text-slate-200">Live drop performance</p>
+          <p class="text-xs text-slate-400">Stripe Checkout · Updated <%= time_ago_in_words(2.hours.ago) %> ago</p>
+        </div>
+        <div class="space-y-6 px-6 py-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-300">Signal Hoodie</p>
+              <p class="text-xs text-slate-500">Printful SKU HOODIE-001</p>
+            </div>
+            <p class="text-sm font-semibold text-white">126 sold</p>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-300">Transit Crossbody</p>
+              <p class="text-xs text-slate-500">Stripe Checkout Session #cs_42</p>
+            </div>
+            <p class="text-sm font-semibold text-white">78 sold</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-slate-400">Fulfillment queue</p>
+            <div class="mt-4 space-y-3">
+              <% @best_sellers.first(3).each do |product| %>
+                <div class="flex items-center justify-between text-sm text-slate-300">
+                  <span><%= product.name %></span>
+                  <span class="text-xs text-cyan-300"><%= product.printful_sku %></span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="integrations" class="mt-16 rounded-4xl border border-slate-800/70 bg-slate-950/70 px-6 py-12 shadow-xl lg:px-12">
+  <div class="grid gap-8 lg:grid-cols-3">
+    <% @perks.each do |perk| %>
+      <div class="rounded-3xl border border-slate-800/60 bg-slate-900/60 p-6">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800/60">
+          <% case perk[:icon] %>
+          <% when "truck" %>
+            <svg class="h-6 w-6 text-cyan-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V5.25A2.25 2.25 0 015.25 3h8.25A2.25 2.25 0 0115.75 5.25V7.5h1.09a2.25 2.25 0 011.858 1.006L20.75 11.25V16.5M3 16.5h18M3 16.5a2.25 2.25 0 104.5 0M21 16.5a2.25 2.25 0 10-4.5 0" />
+            </svg>
+          <% when "credit-card" %>
+            <svg class="h-6 w-6 text-cyan-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5A2.25 2.25 0 015.25 5.25h13.5A2.25 2.25 0 0121 7.5v9a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 16.5v-9z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5h18M7.5 15h.008v.008H7.5V15z" />
+            </svg>
+          <% else %>
+            <svg class="h-6 w-6 text-cyan-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75l8.25 4.5 8.25-4.5M3.75 12.75l8.25 4.5 8.25-4.5" />
+            </svg>
+          <% end %>
+        </div>
+        <h3 class="mt-6 text-lg font-semibold text-white"><%= perk[:title] %></h3>
+        <p class="mt-3 text-sm leading-relaxed text-slate-300"><%= perk[:description] %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<section class="mt-20" id="new">
+  <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Featured drops</p>
+      <h2 class="mt-2 text-3xl font-semibold text-white">Where premium fabrics meet modular design.</h2>
+    </div>
+    <%= link_to "View all products", products_path, class: "text-sm font-medium text-cyan-300 transition hover:text-cyan-200" %>
+  </div>
+  <div class="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+    <%= render partial: "products/product_card", collection: @featured_products, as: :product %>
+  </div>
+</section>
+
+<section class="mt-24 rounded-4xl border border-slate-800/70 bg-gradient-to-br from-slate-900/80 via-slate-950 to-slate-950/90 px-6 py-16 lg:px-12">
+  <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <div>
+      <h2 class="text-3xl font-semibold text-white">New arrivals built for versatile layering.</h2>
+      <p class="mt-4 text-slate-300">Drop limited runs across categories and keep everything in sync with automated Printful product pushes. Each template is ready for color variants, size charts, and detailed product storytelling.</p>
+      <dl class="mt-8 grid gap-6 text-sm text-slate-300 sm:grid-cols-2">
+        <div class="rounded-3xl border border-slate-800/60 bg-slate-900/60 p-5">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Flexible checkout</dt>
+          <dd class="mt-2 text-sm">Stripe Checkout, Payment Links, and in-cart upsells pre-wired for your launches.</dd>
+        </div>
+        <div class="rounded-3xl border border-slate-800/60 bg-slate-900/60 p-5">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Printful sync</dt>
+          <dd class="mt-2 text-sm">Map Printful variants, mockups, and pricing once—keep it fresh with instant catalog refreshes.</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="grid gap-6 md:grid-cols-2">
+      <% @new_arrivals.each do |product| %>
+        <div class="flex flex-col overflow-hidden rounded-3xl border border-slate-800/60 bg-slate-900/50">
+          <%= image_tag product.primary_image, alt: product.name, class: "aspect-[4/5] w-full object-cover" %>
+          <div class="flex flex-1 flex-col gap-2 px-5 py-5">
+            <p class="text-xs uppercase tracking-wide text-cyan-300"><%= product.category %></p>
+            <p class="text-base font-semibold text-white"><%= product.name %></p>
+            <p class="text-sm text-slate-400"><%= truncate(product.description, length: 80) %></p>
+            <p class="mt-auto text-sm font-medium text-slate-200"><%= product.formatted_price %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section id="collections" class="mt-24">
+  <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Curated worlds</p>
+      <h2 class="mt-2 text-3xl font-semibold text-white">Build stories across categories and launch new capsules effortlessly.</h2>
+    </div>
+    <%= link_to "Build a capsule", products_path, class: "text-sm font-medium text-cyan-300 transition hover:text-cyan-200" %>
+  </div>
+  <div class="mt-10 grid gap-8 md:grid-cols-3">
+    <% @collections.each do |collection| %>
+      <div class="overflow-hidden rounded-3xl border border-slate-800/60 bg-slate-900/60">
+        <%= image_tag collection[:image_url], alt: collection[:name], class: "aspect-[4/3] w-full object-cover" %>
+        <div class="px-6 py-6">
+          <p class="text-sm font-semibold text-white"><%= collection[:name] %></p>
+          <p class="mt-3 text-sm text-slate-300"><%= collection[:description] %></p>
+          <%= link_to "Explore drop", collection[:href], class: "mt-4 inline-flex items-center text-sm font-semibold text-cyan-300 transition hover:text-cyan-200" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<section class="mt-24 rounded-4xl border border-slate-800/70 bg-slate-950/80 px-6 py-16 lg:px-12">
+  <div class="grid gap-10 lg:grid-cols-2">
+    <% @testimonials.each do |testimonial| %>
+      <div class="rounded-3xl border border-slate-800/60 bg-slate-900/60 p-8">
+        <div class="flex items-center gap-4">
+          <%= image_tag testimonial[:avatar_url], alt: testimonial[:name], class: "h-12 w-12 rounded-full object-cover" %>
+          <div>
+            <p class="text-sm font-semibold text-white"><%= testimonial[:name] %></p>
+            <p class="text-xs text-slate-400"><%= testimonial[:title] %></p>
+          </div>
+        </div>
+        <p class="mt-5 text-base leading-relaxed text-slate-200">“<%= testimonial[:quote] %>”</p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<section class="mt-24 overflow-hidden rounded-4xl border border-slate-800/70 bg-gradient-to-br from-cyan-500/10 via-slate-900 to-slate-950 px-6 py-16 lg:px-12">
+  <div class="mx-auto flex max-w-4xl flex-col items-center text-center">
+    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Ready to launch?</p>
+    <h2 class="mt-3 text-3xl font-semibold text-white">Craft your next drop with Stripe + Printful in weeks, not months.</h2>
+    <p class="mt-4 text-slate-200">Design the experience, set the price, and let the integrations orchestrate fulfillment and payments. Start with the sample catalog or bring your own Printful products.</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <%= link_to "View sample catalog", products_path, class: "rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:bg-slate-200" %>
+      <%= link_to "Preview checkout", checkout_path, class: "rounded-full border border-slate-700 px-6 py-3 text-sm font-semibold text-white transition hover:border-slate-500" %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+<div class="rounded-4xl border border-slate-800/70 bg-slate-950/70 p-8">
+  <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">R-One Catalog</p>
+      <h1 class="mt-2 text-3xl font-semibold text-white">Modular pieces across streetwear, outerwear, and accessories.</h1>
+      <p class="mt-4 max-w-2xl text-sm text-slate-300">Explore the full collection before connecting your own Printful products. Each item is ready with variant data, storytelling, and Stripe-ready pricing.</p>
+    </div>
+    <%= link_to "Preview checkout", checkout_path, class: "inline-flex items-center gap-2 rounded-full border border-slate-700 px-5 py-2.5 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300" %>
+  </div>
+  <div class="mt-8 flex flex-wrap items-center gap-3">
+    <%= link_to products_path, class: "inline-flex items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide #{ @selected_category.present? ? 'border-slate-700 text-slate-300 hover:border-slate-500' : 'border-cyan-400/50 bg-cyan-500/10 text-cyan-200' }" do %>
+      All
+    <% end %>
+    <% @categories.each do |category| %>
+      <% active = category == @selected_category %>
+      <%= link_to category, products_path(category: category), class: "inline-flex items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide #{active ? 'border-cyan-400/50 bg-cyan-500/10 text-cyan-200' : 'border-slate-700 text-slate-300 hover:border-slate-500'}" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+  <% @products.each do |product| %>
+    <%= render partial: "products/product_card", locals: { product: product } %>
+  <% end %>
+</div>

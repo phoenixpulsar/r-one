@@ -1,0 +1,32 @@
+<div class="group flex flex-col overflow-hidden rounded-3xl border border-slate-800/70 bg-slate-900/70 shadow-lg shadow-slate-950/30 transition hover:-translate-y-1 hover:border-cyan-400/40 hover:shadow-cyan-500/20">
+  <%= link_to product_path(product.id), class: "relative block overflow-hidden" do %>
+    <%= image_tag product.primary_image, alt: product.name, class: "aspect-[4/5] w-full object-cover transition duration-300 group-hover:scale-105" %>
+    <% if product.badge.present? %>
+      <span class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow"> <%= product.badge.titleize %> </span>
+    <% end %>
+  <% end %>
+  <div class="flex flex-1 flex-col px-5 py-5">
+    <div class="flex items-center justify-between text-xs uppercase tracking-wide text-slate-400">
+      <span><%= product.category %></span>
+      <% if product.synced? %>
+        <span class="flex items-center gap-1 text-emerald-300"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Synced</span>
+      <% else %>
+        <span class="text-slate-500">Draft</span>
+      <% end %>
+    </div>
+    <h3 class="mt-3 text-lg font-semibold text-white"><%= link_to product.name, product_path(product.id), class: "transition hover:text-cyan-300" %></h3>
+    <p class="mt-2 text-sm text-slate-400"><%= truncate(product.description, length: 100) %></p>
+    <div class="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
+      <% product.colors.first(3).each do |color| %>
+        <span class="rounded-full border border-slate-700 px-3 py-1"><%= color %></span>
+      <% end %>
+      <% if product.colors.size > 3 %>
+        <span class="rounded-full border border-slate-700 px-3 py-1">+<%= product.colors.size - 3 %></span>
+      <% end %>
+    </div>
+    <div class="mt-auto flex items-center justify-between pt-5">
+      <p class="text-base font-semibold text-white"><%= product.formatted_price %></p>
+      <%= link_to "View", product_path(product.id), class: "rounded-full border border-slate-700 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300" %>
+    </div>
+  </div>
+</div>
